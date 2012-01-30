@@ -55,7 +55,7 @@ public class SVNWrapper {
 		PipedInputStream pipeIn = null;
 
 		try{
-			file = File.createTempFile("Git-", ".log");
+			file = File.createTempFile("SVN-", ".log");
 			fOS = new FileOutputStream(file);
 			PumpStreamHandler streamHandler = new PumpStreamHandler();
 			streamHandler = new PumpStreamHandler(fOS);
@@ -88,12 +88,22 @@ public class SVNWrapper {
 			String stdErr = Utilities.piped2String(pipeIn);
 
 			if (statusCode != 0){
+				if (stdErr == null || stdErr.isEmpty()){
+					stdErr = "";
+					String s;
+					while( ( s = br.readLine()) != null){
+						stdErr += s;
+					}
+				}
 				result.put("status", "NOK")
-						.put("error", stdErr);
+						.put("error", "SVNError " + stdErr);
+
+
 			} else {
+
 				result = SNVLogParser.parseData(br);
 			}
-			logger.debug("GitConnector msg: result "+ result);
+			logger.debug("SVNWrapper msg: result "+ result);
 
 		}
 		catch (IOException e) {
@@ -111,5 +121,12 @@ public class SVNWrapper {
 		return result;
 	}
 
-
+	public static void main(String[] args) {
+		SVNWrapper wrapper = new SVNWrapper("http://plugins.svn.wordpress.org/wp-stripe", "/usr/bin/svn", null);
+		try {
+			System.out.println(wrapper.callSVN());
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
 }

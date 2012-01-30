@@ -44,7 +44,7 @@ public class Utilities {
 		try {
 			while (!(bis.available()<1)){
 				p = bis.read(b, 0, 1024);
-				bos.write(b, 0 , p);
+				bos.write(b, 0, p);
 				sb.append(new String(b, 0 , p));
 			}
 		} catch (IOException ioe) {
