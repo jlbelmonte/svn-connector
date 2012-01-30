@@ -7,6 +7,7 @@ import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.log4j.Logger;
 import siena.Json;
+import utils.SNVLogParser;
 import utils.Utilities;
 
 import java.io.BufferedReader;
@@ -86,7 +87,12 @@ public class SVNWrapper {
 
 			String stdErr = Utilities.piped2String(pipeIn);
 
-			result = Utilities.parseData(br, stdErr, statusCode, action);
+			if (statusCode != 0){
+				result.put("status", "NOK")
+						.put("error", stdErr);
+			} else {
+				result = SNVLogParser.parseData(br);
+			}
 			logger.debug("GitConnector msg: result "+ result);
 
 		}
@@ -100,7 +106,10 @@ public class SVNWrapper {
 			try {pipeIn.close();} catch (Exception e) {}
 			logger.debug("File size " + file.length());
 			file.delete();
+
 		}
 		return result;
 	}
+
+
 }
