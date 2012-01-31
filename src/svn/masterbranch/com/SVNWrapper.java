@@ -33,7 +33,7 @@ public class SVNWrapper {
 		this.revFrom = revision;
 	}
 
-	private Json callSVN() throws SVNException{
+	public Json callSVN() throws SVNException{
 		logger.debug("building the command to execute");
 		CommandLine cl = new CommandLine(command);
 		cl.addArgument(action);
