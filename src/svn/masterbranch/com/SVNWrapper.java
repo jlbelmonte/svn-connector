@@ -1,14 +1,14 @@
 package svn.masterbranch.com;
 
-import svn.masterbranch.com.exceptions.exceptions.SVNException;
+import svn.masterbranch.com.exceptions.SVNException;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.log4j.Logger;
 import siena.Json;
-import svn.masterbranch.com.exceptions.utils.SNVLogParser;
-import svn.masterbranch.com.exceptions.utils.Utilities;
+import svn.masterbranch.com.utils.SNVLogParser;
+import svn.masterbranch.com.utils.Utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -88,13 +88,8 @@ public class SVNWrapper {
 			String stdErr = Utilities.piped2String(pipeIn);
 
 			if (statusCode != 0){
-				if (stdErr == null || stdErr.isEmpty()){
-					stdErr = "";
-					String s;
-					while( ( s = br.readLine()) != null){
-						stdErr += s;
-					}
-				}
+				if (stdErr == null || stdErr.isEmpty()) stdErr = Utilities.getString(br);
+
 				result.put("status", "NOK")
 						.put("error", "SVNError " + stdErr);
 			} else {

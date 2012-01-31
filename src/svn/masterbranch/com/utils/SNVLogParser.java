@@ -1,4 +1,4 @@
-package svn.masterbranch.com.exceptions.utils;
+package svn.masterbranch.com.utils;
 
 
 import jregex.Matcher;
