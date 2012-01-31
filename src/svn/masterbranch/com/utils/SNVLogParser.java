@@ -85,7 +85,8 @@ public class SNVLogParser {
 
 				Pattern message = new Pattern(".*");
 				if (authorMatched && lastWasFile && message.matcher(s).find()){
-					t.message += s;
+					t.message += " "+s;
+					t.message = t.message.trim();
 				}
 
 			}

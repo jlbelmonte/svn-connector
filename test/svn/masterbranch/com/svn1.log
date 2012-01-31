@@ -1,0 +1,25 @@
+------------------------------------------------------------------------
+r1 | Mock_author | 2012-01-23 10:13:16 +0100 (Mon, 23 Jan 2012) | 1 line
+Changed paths:
+   A /foo/tags/0.1  (from /wp-foo/trunk:2)
+
+Message rev1
+------------------------------------------------------------------------
+r2 | Mock_author | 2012-01-23 10:10:51 +0100 (Mon, 23 Jan 2012) | 1 line
+Changed paths:
+   M /foo/trunk/bar.js
+   M /foo/trunk/baz.js
+   A /foo/trunk/john.html
+   D /foo/trunk/doe.rb
+
+Message rev2
+------------------------------------------------------------------------
+r3 | Mock_author2 | 2012-01-21 10:52:48 +0100 (Sat, 21 Jan 2012) | 1 line
+Changed paths:
+   M /foo/trunk/mock_utils/foo.java
+   M /foo/trunk/mock_utils/bar.java
+
+Message rev3
+Message rev3 line2
+Message rev3 line3 with dots... ;
+------------------------------------------------------------------------
