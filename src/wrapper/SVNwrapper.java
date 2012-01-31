@@ -97,8 +97,6 @@ public class SVNWrapper {
 				}
 				result.put("status", "NOK")
 						.put("error", "SVNError " + stdErr);
-
-
 			} else {
 
 				result = SNVLogParser.parseData(br);
@@ -107,7 +105,7 @@ public class SVNWrapper {
 
 		}
 		catch (IOException e) {
-			logger.error("Git Exception: "+ uri, e);
+			throw new SVNException();
 		} finally {
 			try {fOS.close();} catch (Exception e) {}
 			try {fr.close();} catch (Exception e) {}
