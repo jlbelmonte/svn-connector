@@ -1,14 +1,14 @@
-package wrapper;
+package svn.masterbranch.com;
 
-import exceptions.SVNException;
+import svn.masterbranch.com.exceptions.exceptions.SVNException;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.log4j.Logger;
 import siena.Json;
-import utils.SNVLogParser;
-import utils.Utilities;
+import svn.masterbranch.com.exceptions.utils.SNVLogParser;
+import svn.masterbranch.com.exceptions.utils.Utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
