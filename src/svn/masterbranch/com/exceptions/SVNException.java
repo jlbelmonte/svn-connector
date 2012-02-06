@@ -6,7 +6,7 @@ public class SVNException extends Exception{
 	String uri;
 	public SVNException() {}
 
-	public SVNException(String uri, String message) {
+	public SVNException(String message, String uri) {
 		this.msg = message;
 		this.uri = uri;
 	}

@@ -19,7 +19,7 @@ public class SNVLogParser {
 		Json commitList = Json.list();
 
 		Pattern firstCommitLine = new Pattern("\\-+");
-		Pattern authorCommitInfo = new Pattern("r(\\d+)\\s*\\|\\s*([\\w\\-\\.]+)\\s*\\|\\s*(.*?)\\s*\\|\\s*([\\w\\s]+)");
+		Pattern authorCommitInfo = new Pattern("r(\\d+)\\s*\\|\\s*([\\w\\-\\s\\(\\)\\.\\(\\)]+)\\s*\\|\\s*(.*?)\\s*\\|\\s*([\\w\\s]+)");
 		Pattern filesStart = new Pattern("Changed paths\\:");
 		Pattern fileName = new Pattern("\\s*([AUDGCM])\\s+([\\w\\-\\./]+)(.*)");
 
@@ -38,13 +38,13 @@ public class SNVLogParser {
 					authorMatched = false;
 					if (t != null){
 						Json commit = Json.map();
-						commit.put("revision", t.revision)
-								.put("author", t.author)
+						commit.put("revision", t.revision.trim())
+								.put("author", t.author.trim())
 								.put("added", JsonSerializer.serialize(t.added))
 								.put("deleted", JsonSerializer.serialize(t.deleted))
 								.put("modified", JsonSerializer.serialize(t.modified))
-								.put("message", t.message)
-								.put("date", t.dateString);
+								.put("message", t.message.trim())
+								.put("date", t.dateString.trim());
 						commitList.add(commit);
 					}
 					t = new TempCommit();

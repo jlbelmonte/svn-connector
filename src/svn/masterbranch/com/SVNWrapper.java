@@ -1,12 +1,13 @@
 package svn.masterbranch.com;
 
-import svn.masterbranch.com.exceptions.SVNException;
+import jregex.Pattern;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.log4j.Logger;
 import siena.Json;
+import svn.masterbranch.com.exceptions.SVNException;
 import svn.masterbranch.com.utils.SNVLogParser;
 import svn.masterbranch.com.utils.Utilities;
 
@@ -27,6 +28,10 @@ public class SVNWrapper {
 	private String action = "log";
 	private String verboseParam = "-v";
 	
+	private Pattern RESOLV = new Pattern(".*?Could not resolve hostname.*?");
+	private Pattern NOREV = new Pattern(".*?No such revision.*");
+	
+	
 	public SVNWrapper (String repoUri, String path, Long revision){
 		this.uri = repoUri;
 		this.command = path;
@@ -41,7 +46,7 @@ public class SVNWrapper {
 		cl.addArgument(uri);
 		if (revFrom != null && revFrom > 0){
 			cl.addArgument("-r");
-			cl.addArgument(""+revFrom);
+			cl.addArgument(""+revFrom+":HEAD");
 		}
 		logger.debug("SVN connector msg: Attempting to log : "+this.uri);
 
@@ -89,9 +94,12 @@ public class SVNWrapper {
 
 			if (statusCode != 0){
 				if (stdErr == null || stdErr.isEmpty()) stdErr = Utilities.getString(br);
+				if (RESOLV.matches(stdErr)) throw  new SVNException("Unable to resolv host", uri);
+				if (NOREV.matches(stdErr)) throw  new SVNException("No new revisions", uri);
 
-				result.put("status", "NOK")
-						.put("error", "SVNError " + stdErr);
+				result.put("status", "NOK");
+				result.put("error", stdErr);
+
 			} else {
 
 				result = SNVLogParser.parseData(br);
