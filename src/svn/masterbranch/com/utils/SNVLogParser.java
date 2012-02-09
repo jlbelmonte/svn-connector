@@ -19,7 +19,7 @@ public class SNVLogParser {
 		Json commitList = Json.list();
 
 		Pattern firstCommitLine = new Pattern("\\-+");
-		Pattern authorCommitInfo = new Pattern("r(\\d+)\\s*\\|\\s*([\\w\\-\\s\\(\\)\\.\\(\\)]+)\\s*\\|\\s*(.*?)\\s*\\|\\s*([\\w\\s]+)");
+		Pattern authorCommitInfo = new Pattern("r(\\d+)\\s*\\|\\s*([\\w\\-\\_\\+\\*\\s\\(\\)@<>\\.\\(\\)]+)\\s*\\|\\s*(.*?)\\s*\\|\\s*([\\w\\s]+)");
 		Pattern filesStart = new Pattern("Changed paths\\:");
 		Pattern fileName = new Pattern("\\s*([AUDGCM])\\s+([\\w\\-\\./]+)(.*)");
 
@@ -57,6 +57,9 @@ public class SNVLogParser {
 					t.author = authorMatch.group(2);
 					t.dateString = authorMatch.group(3);
 					t.revision = authorMatch.group(1);
+					if (t.author == null || t.author.isEmpty() || t.revision == null || t.revision.isEmpty()){
+						return rejectLog();
+					}
 					authorMatched = true;
 					continue;
 				}
@@ -93,6 +96,7 @@ public class SNVLogParser {
 
 		} catch (Exception e ){
 		  	e.printStackTrace();
+			return rejectLog();
 		}
 
 		result.put("status", "OK")
@@ -100,6 +104,12 @@ public class SNVLogParser {
 		return result;
 	}
 	
+	private static Json rejectLog(){
+		Json result = Json.map();
+		result.put("status", "NOK")
+				.put("error", "Unable to parse the log");
+		return result;
+	}
 	// nested static class instead  inner
 	public static class TempCommit{
 		List<String> added;
