@@ -5,9 +5,24 @@ import siena.Json;
 import svn.masterbranch.com.exceptions.SVNException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 public class SVNWrapperTest {
+	
+	@Test
+	public void testCodeplexRepository() throws SVNException {
+		String uri = "https://exepack.svn.codeplex.com/svn";
+		SVNWrapper wrapper = new SVNWrapper(uri, "/usr/bin/svn", null);
+		Json svnResult = wrapper.callSVN(); 
+		assertEquals("OK", svnResult.get("status").str());
+		Json commits = svnResult.get("commits");
+		assertEquals(71, commits.size());
+		for (Json commit : commits) {
+			assertNotSame("", commit.get("author").str());
+		}
+	}
+	
 	@Test
 	public void testSimpleLogRevision(){
 		String uri = "http://dmo-compact.googlecode.com/svn/trunk/";
@@ -17,7 +32,6 @@ public class SVNWrapperTest {
 			svnResult = wrapper.callSVN();
 		} catch (SVNException e){
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 		}
 
 		assertEquals("OK", svnResult.get("status").str());
@@ -58,7 +72,6 @@ public class SVNWrapperTest {
 			svnResult = wrapper.callSVN();
 		} catch (SVNException e){
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 		}
 
 		assertEquals("OK", svnResult.get("status").str());
