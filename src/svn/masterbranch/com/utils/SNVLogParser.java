@@ -19,7 +19,7 @@ public class SNVLogParser {
 		Json commitList = Json.list();
 
 		Pattern firstCommitLine = new Pattern("\\-+");
-		Pattern authorCommitInfo = new Pattern("r(\\d+)\\s*\\|\\s*([\\w\\-\\_\\+\\*\\s\\(\\)@<>\\.\\(\\)]+)\\s*\\|\\s*(.*?)\\s*\\|\\s*([\\w\\s]+)");
+		Pattern authorCommitInfo = new Pattern("r(\\d+)\\s*\\|\\s*(.*?)\\s*\\|\\s*(.*?)\\s*\\|\\s*([\\w\\s]+)");
 		Pattern filesStart = new Pattern("Changed paths\\:");
 		Pattern fileName = new Pattern("\\s*([AUDGCM])\\s+([\\w\\-\\./]+)(.*)");
 
@@ -29,9 +29,7 @@ public class SNVLogParser {
 		TempCommit t = null;
 		
 		try{
-			int count =0;
-			while( ( s = stdOutput.readLine()) != null){
-				count ++;
+			while ((s = stdOutput.readLine()) != null) {
 				s = s.trim();
 				if (firstCommitLine.matches(s)){
 					lastWasFile = false;
@@ -52,7 +50,7 @@ public class SNVLogParser {
 				}
 
 				Matcher authorMatch = authorCommitInfo.matcher(s);
-				if (authorMatch.matches()){
+				if (authorMatch.matches()) {
 					lastWasFile = false;
 					t.author = authorMatch.group(2);
 					t.dateString = authorMatch.group(3);
