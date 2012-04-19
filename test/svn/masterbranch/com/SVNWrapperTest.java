@@ -165,11 +165,19 @@ public class SVNWrapperTest {
 	}
 
 
+	@Test
+	public void testAuthenticatedSVNConnection(){
+		String uri = "http://argouml.tigris.org/svn/argouml/trunk";
+		long revision = 16187;
+		SVNWrapper wrapper = new SVNWrapper(uri, "/usr/bin/svn", revision, "guest", "");
+		Json svnResult = Json.map(); 
+		try{
+			svnResult = wrapper.callSVN();
+		} catch (SVNException e){
+			e.printStackTrace();
+		}
 
-
-	
-	
-	
-
+		assertEquals("OK", svnResult.get("status").str());
+	}
 }
 
