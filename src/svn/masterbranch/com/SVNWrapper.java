@@ -5,6 +5,7 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import siena.Json;
 import svn.masterbranch.com.exceptions.SVNException;
@@ -28,6 +29,10 @@ public class SVNWrapper {
 	private String action = "log";
 	private String verboseParam = "-v";
 	
+	/** SVN Authentication */
+	private String username = null;
+	private String passwd = null;
+	
 	private Pattern RESOLV = new Pattern(".*?Could not resolve hostname.*?");
 	private Pattern NOREV = new Pattern(".*?No such revision.*");
 	
@@ -37,6 +42,16 @@ public class SVNWrapper {
 		this.command = path;
 		this.revFrom = revision;
 	}
+	
+	public SVNWrapper (String repoUri, String path, Long revision, String username, String passwd) {
+		this(repoUri, path, revision);
+		this.username = username;
+		this.passwd = passwd;
+		if (StringUtils.isEmpty(passwd)) {
+			this.passwd = "''";
+		}
+	}
+	
 
 	public Json callSVN() throws SVNException{
 		logger.debug("building the command to execute");
@@ -47,6 +62,12 @@ public class SVNWrapper {
 		if (revFrom != null && revFrom > 0){
 			cl.addArgument("-r");
 			cl.addArgument(""+revFrom+":HEAD");
+		}
+		if (username != null && !StringUtils.isEmpty(username)) {
+			cl.addArgument("--username");
+			cl.addArgument(username);			
+			cl.addArgument("--password");
+			cl.addArgument(passwd);
 		}
 		logger.debug("SVN connector msg: Attempting to log : "+this.uri);
 
